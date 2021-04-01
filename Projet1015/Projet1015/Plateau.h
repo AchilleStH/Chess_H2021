@@ -11,14 +11,21 @@
 using namespace std;
 
 
-
+// class Plateau
+// Une instance de Plateau représente un échiquier.
+// Un échiquier possède 64 cases, représenté par 
+// un array bi-dimentionnel de Case.
+// setPiece permet d'affecter une pièce a une case
+// du plateau, et afficher affiche le tableau
+// dans la console.
 class Plateau
 {
 public:
 	// SUPPRIMER CETTE MÉTHODE
-	Plateau() = default;
+	Plateau();
 	void afficher();
-	void setPiece(unique_ptr<Piece> &piece, Position pos);
+	void setPiece(Piece* piece, Position pos);
+	void finPartie();
 private:
-	Case plateau[8][8];
+	Piece* plateau[8][8] = { nullptr };
 };

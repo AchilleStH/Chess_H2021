@@ -1,9 +1,17 @@
 #include "Piece.h"
+#include "Plateau.h"
+
+
+// Implementation de la classe Piece et de ses dérivées
+
 
 
 char Piece::getInfos() const
 {
-	return mnemonique;
+	if (this != nullptr)
+		return mnemonique;
+	else
+		return 'x';
 }
 
 
@@ -17,8 +25,10 @@ Tour::Tour(Couleur couleur, Position pos)
 
 bool Tour::verificationDeplacement(Position nouvellePosition)
 {
-	// Pour l'instant, je met toujours le déplacement a true
-	return true;
+	if (nouvellePosition.verificationPosition())
+		return true;
+	else
+		return false;
 }
 
 void Tour::deplacement(Position nouvellePosition)
