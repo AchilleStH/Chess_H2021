@@ -1,14 +1,7 @@
+#pragma once
+#include "Piece.h"
 #include <iostream>
 #include <string>
-#include <vector>
-#pragma once
-#include <map>
-#include <algorithm>
-#include <string>
-#include "Piece.h"
-
-
-using namespace std;
 
 
 // class Plateau
@@ -24,8 +17,9 @@ public:
 	// SUPPRIMER CETTE MÉTHODE
 	Plateau();
 	void afficher();
-	void setPiece(shared_ptr<Piece> piece, Position pos);
+	void setPiece(std::shared_ptr<Piece> piece, Position pos);
 	void deplacerPiece(Position posActuelle, Position nouvellePos);
+	std::shared_ptr<Piece> getPiece(Position pos) const { return plateau[pos.x][pos.y]; }
 private:
-	shared_ptr<Piece> plateau[8][8] = { nullptr };
+	std::shared_ptr<Piece> plateau[8][8] = { nullptr };
 };

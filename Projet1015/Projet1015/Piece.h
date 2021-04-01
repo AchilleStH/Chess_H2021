@@ -1,13 +1,11 @@
 #pragma once
+
 #include <iostream>
 #include <string>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <string>
 
-using namespace std;
 
+// Permet d'utiliser Plateau avant sa définition
+class Plateau;
 
 // struct Position
 // Structure qui permet de définir une position à l'aide de
@@ -43,8 +41,7 @@ class Piece
 {
 public: 
 	Piece() : position(Position(0, 0)), couleurPiece(Couleur::Default), mnemonique('x'){};
-	virtual bool verificationDeplacement(Position nouvellePosition) = 0;
-	virtual void deplacement(Position nouvellePosition) = 0;
+	virtual bool verificationDeplacement(Position nouvellePosition, Plateau echiquier) = 0;
 	// A DES FINS DE DEBUGGAGE, A RETIRER
 	char getInfos() const;
 	Position position;
@@ -58,8 +55,7 @@ class Tour : public Piece
 {
 public:
 	Tour(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition);
-	void deplacement(Position nouvellePosition);
+	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
 };
 
 // Class Roi
@@ -68,8 +64,7 @@ class Roi : public Piece
 {
 public:
 	Roi(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition);
-	void deplacement(Position nouvellePosition);
+	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
 };
 
 // Class Reine
@@ -78,8 +73,7 @@ class Reine : public Piece
 {
 public: 
 	Reine(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition);
-	void deplacement(Position nouvellePosition);
+	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
 };
 
 // Class Cavalier
@@ -88,8 +82,9 @@ class Cavalier : public Piece
 {
 public:
 	Cavalier(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition);
-	void deplacement(Position nouvellePosition);
+	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+private:
+	std::pair<int, int> deplacementsPossibles[8] = { {-2, -1}, {-1, -2}, {+1, -2}, {-2, +1}, {-1, +2}, {+1, +2}, {+2, +1}, {+2, -1} };
 };
 
 
@@ -99,6 +94,5 @@ class Fou : public Piece
 {
 public:
 	Fou(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition);
-	void deplacement(Position nouvellePosition);
+	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
 };

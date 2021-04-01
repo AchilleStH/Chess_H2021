@@ -1,11 +1,8 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <string>
 #include "Piece.h"
 #include "Plateau.h"
+
+#include <iostream>
+#include <string>
 
 
 using namespace std;
@@ -18,13 +15,11 @@ int main()
 	shared_ptr<Piece> cavalier = make_shared<Cavalier>(Cavalier(Couleur::Blanc, Position(5, 3)));
 	cout << "DEBUT\n";
 	Plateau echiquier;
-	echiquier.setPiece(tour, tour->position);
-
-	echiquier.setPiece(roi, roi->position);
-
 	echiquier.setPiece(cavalier, cavalier->position);
 
-	echiquier.deplacerPiece(tour->position, Position(1, 1));
+	echiquier.afficher();
+
+	echiquier.deplacerPiece(cavalier->position, Position(7, 5));
 
 	echiquier.afficher();
 }

@@ -1,4 +1,5 @@
 #include "Plateau.h"
+#include "Piece.h"
 
 // Implementation de la classe Plateau
 Plateau::Plateau() 
@@ -17,21 +18,26 @@ void Plateau::afficher()
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			cout << plateau[i][j]->getInfos() << " ";
+			std::cout << plateau[i][j]->getInfos() << " ";
 			if (j == 7)
-				cout << endl;
+				std::cout << std::endl;
 		}
 	}
+	std::cout << std::endl;
 }
 
 
-void Plateau::setPiece(shared_ptr<Piece> piece, Position pos)
+void Plateau::setPiece(std::shared_ptr<Piece> piece, Position pos)
 {
 	plateau[pos.x-1][pos.y-1] = move(piece);
 }
 
 void Plateau::deplacerPiece(Position posActuelle, Position nouvellePos)
 {
-	plateau[nouvellePos.x - 1][nouvellePos.y - 1] = plateau[posActuelle.x-1][posActuelle.y-1];
-	plateau[posActuelle.x - 1][posActuelle.y - 1] = nullptr;
+	if (plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationDeplacement(nouvellePos, *this))
+	{
+		plateau[posActuelle.x - 1][posActuelle.y - 1]->position = nouvellePos;
+		plateau[nouvellePos.x - 1][nouvellePos.y - 1] = plateau[posActuelle.x - 1][posActuelle.y - 1];
+		plateau[posActuelle.x - 1][posActuelle.y - 1] = nullptr;
+	}
 }

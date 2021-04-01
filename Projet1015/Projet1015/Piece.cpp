@@ -23,17 +23,9 @@ Tour::Tour(Couleur couleur, Position pos)
 	mnemonique = 'T';
 }
 
-bool Tour::verificationDeplacement(Position nouvellePosition)
+bool Tour::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 {
 	return true;
-}
-
-void Tour::deplacement(Position nouvellePosition)
-{
-	if (verificationDeplacement(nouvellePosition) == true)
-		position = Position(nouvellePosition.x, nouvellePosition.y);
-	else
-		cout << "DÉPLACEMENT INVALIDE\n";
 }
 
 
@@ -46,19 +38,12 @@ Roi::Roi(Couleur couleur, Position pos)
 	mnemonique = 'R';
 }
 
-bool Roi::verificationDeplacement(Position nouvellePosition)
+bool Roi::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 {
 	// Pour l'instant, je met toujours le déplacement a true
 	return true;
 }
 
-void Roi::deplacement(Position nouvellePosition)
-{
-	if (verificationDeplacement(nouvellePosition) == true)
-		position = Position(nouvellePosition.x, nouvellePosition.y);
-	else
-		cout << "DÉPLACEMENT INVALIDE\n";
-}
 
 
 
@@ -70,19 +55,12 @@ Reine::Reine(Couleur couleur, Position pos)
 	mnemonique = 'Q';
 }
 
-bool Reine::verificationDeplacement(Position nouvellePosition)
+bool Reine::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 {
 	// Pour l'instant, je met toujours le déplacement a true
 	return true;
 }
 
-void Reine::deplacement(Position nouvellePosition)
-{
-	if (verificationDeplacement(nouvellePosition) == true)
-		position = Position(nouvellePosition.x, nouvellePosition.y);
-	else
-		cout << "DÉPLACEMENT INVALIDE\n";
-}
 
 
 
@@ -94,19 +72,24 @@ Cavalier::Cavalier(Couleur couleur, Position pos)
 	mnemonique = 'C';
 }
 
-bool Cavalier::verificationDeplacement(Position nouvellePosition)
+bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 {
-	// Pour l'instant, je met toujours le déplacement a true
-	return true;
+	bool deplacementValide = false;
+	bool caseDisponible = true;
+	// verification : nouvelle position est valide (mouvement du cavalier)
+	for (std::pair<int, int> pairPos : deplacementsPossibles)
+	{
+		if ((pairPos.first + position.x) == nouvellePosition.x && ((pairPos.second + position.y) == nouvellePosition.y))
+			deplacementValide = true;
+	}
+
+	// verification : cases possibles ne sont pas occupées par une pièce de la même couleur
+	if (echiquier.getPiece(nouvellePosition) != nullptr && echiquier.getPiece(nouvellePosition)->couleurPiece == couleurPiece)
+		caseDisponible = false;
+
+	return (deplacementValide && caseDisponible);
 }
 
-void Cavalier::deplacement(Position nouvellePosition)
-{
-	if (verificationDeplacement(nouvellePosition) == true)
-		position = Position(nouvellePosition.x, nouvellePosition.y);
-	else
-		cout << "DÉPLACEMENT INVALIDE\n";
-}
 
 
 
@@ -118,16 +101,8 @@ Fou::Fou(Couleur couleur, Position pos)
 	mnemonique = 'F';
 }
 
-bool Fou::verificationDeplacement(Position nouvellePosition)
+bool Fou::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 {
 	// Pour l'instant, je met toujours le déplacement a true
 	return true;
-}
-
-void Fou::deplacement(Position nouvellePosition)
-{
-	if (verificationDeplacement(nouvellePosition) == true)
-		position = Position(nouvellePosition.x, nouvellePosition.y);
-	else
-		cout << "DÉPLACEMENT INVALIDE\n";
 }
