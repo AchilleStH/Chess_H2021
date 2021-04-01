@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <string>
 #include "Piece.h"
-#include "Case.h"
+
 
 using namespace std;
 
@@ -24,8 +24,8 @@ public:
 	// SUPPRIMER CETTE MÉTHODE
 	Plateau();
 	void afficher();
-	void setPiece(Piece* piece, Position pos);
-	void finPartie();
+	void setPiece(shared_ptr<Piece> piece, Position pos);
+	void deplacerPiece(Position posActuelle, Position nouvellePos);
 private:
-	Piece* plateau[8][8] = { nullptr };
+	shared_ptr<Piece> plateau[8][8] = { nullptr };
 };

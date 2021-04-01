@@ -15,17 +15,22 @@ using namespace std;
 // et y l'index de la colonne.
 struct Position
 {
-	Position(int x_, int y_) : x(x_), y(y_) {};
 	// Vérifie si une position est valide. (x et y compris entre 1 et 8)
-	bool verificationPosition() { return (x <= 8 && x >= 1 && y <= 8 && y >= 1); }
-	int x = 0;
-	int y = 0;
+	Position(int x_, int y_)
+	{
+		if (x_ <= 8 && x_ >= 1 && y_ <= 8 && y_ >= 1)
+		{
+			x = x_;
+			y = y_;
+		}
+	};
+	int x = 1;
+	int y = 1;
 };
 
 // enum class Couleur
 // Enumération permettant de définir la couleur d'une
-// pièce. Une pièce peut être Blanche ou Noire, le type
-// "Default" représente la 'couleur' d'une case vide
+// pièce. Une pièce peut être Blanche ou Noire.
 enum class Couleur {Blanc, Noir, Default};
 
 // class Piece
@@ -38,8 +43,8 @@ class Piece
 {
 public: 
 	Piece() : position(Position(0, 0)), couleurPiece(Couleur::Default), mnemonique('x'){};
-	virtual bool verificationDeplacement(Position nouvellePosition) { return false; };
-	void deplacement(Position nouvellePosition) {};
+	virtual bool verificationDeplacement(Position nouvellePosition) = 0;
+	virtual void deplacement(Position nouvellePosition) = 0;
 	// A DES FINS DE DEBUGGAGE, A RETIRER
 	char getInfos() const;
 	Position position;

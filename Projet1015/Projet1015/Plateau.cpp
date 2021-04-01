@@ -25,18 +25,13 @@ void Plateau::afficher()
 }
 
 
-void Plateau::setPiece(Piece* piece, Position pos)
+void Plateau::setPiece(shared_ptr<Piece> piece, Position pos)
 {
-	plateau[pos.x-1][pos.y-1] = piece;
+	plateau[pos.x-1][pos.y-1] = move(piece);
 }
 
-void Plateau::finPartie() 
+void Plateau::deplacerPiece(Position posActuelle, Position nouvellePos)
 {
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			delete plateau[i][j];
-		}
-	}
+	plateau[nouvellePos.x - 1][nouvellePos.y - 1] = plateau[posActuelle.x-1][posActuelle.y-1];
+	plateau[posActuelle.x - 1][posActuelle.y - 1] = nullptr;
 }

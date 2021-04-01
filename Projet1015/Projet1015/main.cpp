@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <string>
 #include "Piece.h"
-#include "Case.h"
 #include "Plateau.h"
 
 
@@ -14,19 +13,18 @@ using namespace std;
 
 int main()
 {
-	Piece* tour = new Tour(Couleur::Blanc, Position(2, 3));
-	Piece* roi = new Roi(Couleur::Blanc, Position(7, 3));
-	Piece* cavalier = new Cavalier(Couleur::Blanc, Position(45, 3));
-
+	shared_ptr<Piece> tour = make_shared<Tour>(Tour(Couleur::Blanc, Position(2, 3)));
+	shared_ptr<Piece> roi = make_shared<Roi>(Roi(Couleur::Blanc, Position(7, 3)));
+	shared_ptr<Piece> cavalier = make_shared<Cavalier>(Cavalier(Couleur::Blanc, Position(5, 3)));
 	cout << "DEBUT\n";
-	Plateau test;
-	test.setPiece(tour, tour->position);
+	Plateau echiquier;
+	echiquier.setPiece(tour, tour->position);
 
-	test.setPiece(roi, roi->position);
+	echiquier.setPiece(roi, roi->position);
 
-	test.setPiece(cavalier, cavalier->position);
+	echiquier.setPiece(cavalier, cavalier->position);
 
+	echiquier.deplacerPiece(tour->position, Position(1, 1));
 
-	test.afficher();
-	test.finPartie();
+	echiquier.afficher();
 }

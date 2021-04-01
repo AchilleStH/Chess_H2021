@@ -25,10 +25,7 @@ Tour::Tour(Couleur couleur, Position pos)
 
 bool Tour::verificationDeplacement(Position nouvellePosition)
 {
-	if (nouvellePosition.verificationPosition())
-		return true;
-	else
-		return false;
+	return true;
 }
 
 void Tour::deplacement(Position nouvellePosition)
