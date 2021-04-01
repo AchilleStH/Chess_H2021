@@ -3,15 +3,15 @@
 
 Case::Case()
 {
-	piece_ = Piece();
+	piece_ = make_unique<Piece>(Piece());
 }
 
 Piece Case::getPieceCase() const
 {
-	return piece_;
+	return *piece_.get();
 }
 
-void Case::setPieceCase(Piece nouvellePiece)
+void Case::setPieceCase(unique_ptr<Piece> &nouvellePiece)
 {
-	piece_ = nouvellePiece;
+	piece_ = move(nouvellePiece);
 }

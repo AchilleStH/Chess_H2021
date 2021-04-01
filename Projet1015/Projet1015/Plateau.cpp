@@ -15,7 +15,7 @@ void Plateau::afficher()
 	}
 }
 
-void Plateau::setPiece(Piece piece, Position pos)
+void Plateau::setPiece(unique_ptr<Piece> &piece, Position pos)
 {
 	plateau[pos.x-1][pos.y-1].setPieceCase(piece);
 }

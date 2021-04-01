@@ -48,34 +48,22 @@ using namespace std;
 
 int main()
 {
-	Tour tour(Couleur::Blanc, Position(2, 3));
-	Roi roi(Couleur::Blanc, Position(2, 3));
-	Fou fou(Couleur::Blanc, Position(2, 3));
-	Cavalier cavalier(Couleur::Blanc, Position(2, 3));
-	Reine reine(Couleur::Blanc, Position(2, 3));
+	unique_ptr<Piece> tour = make_unique<Tour>(Tour(Couleur::Blanc, Position(2, 3)));
+	unique_ptr<Piece> roi = make_unique<Roi>(Roi(Couleur::Blanc, Position(2, 3)));
+	unique_ptr<Piece> cavalier = make_unique<Cavalier>(Cavalier(Couleur::Blanc, Position(2, 3)));
+
 
 	cout << "DEBUT\n";
 	Plateau test;
-	test.setPiece(tour, Position(1, 1));
-	test.setPiece(tour, Position(1, 8));
-	test.setPiece(tour, Position(8, 1));
-	test.setPiece(tour, Position(8, 8));
+	test.setPiece(tour, tour.get()->position);
 
-	test.setPiece(cavalier, Position(1, 2));
-	test.setPiece(cavalier, Position(1, 7));
-	test.setPiece(cavalier, Position(8, 2));
-	test.setPiece(cavalier, Position(8, 7));
+	test.setPiece(roi, roi.get()->position);
 
-	test.setPiece(fou, Position(1, 3));
-	test.setPiece(fou, Position(1, 6));
-	test.setPiece(fou, Position(8, 3));
-	test.setPiece(fou, Position(8, 6));
+	test.setPiece(cavalier, cavalier.get()->position);
 
-	test.setPiece(reine, Position(1, 4));
-	test.setPiece(roi, Position(1, 5));
 
-	test.setPiece(reine, Position(8, 4));
-	test.setPiece(roi, Position(8, 5));
+
+
 
 	test.afficher();
 }

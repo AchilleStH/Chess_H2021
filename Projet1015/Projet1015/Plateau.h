@@ -18,7 +18,7 @@ public:
 	// SUPPRIMER CETTE MÉTHODE
 	Plateau() = default;
 	void afficher();
-	void setPiece(Piece piece, Position pos);
+	void setPiece(unique_ptr<Piece> &piece, Position pos);
 private:
 	Case plateau[8][8];
 };

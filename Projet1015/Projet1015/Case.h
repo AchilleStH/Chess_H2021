@@ -13,8 +13,8 @@ class Case
 {
 public: 
 	Case();
-	void setPieceCase(Piece nouvellePiece);
+	void setPieceCase(unique_ptr<Piece> &nouvellePiece);
 	Piece getPieceCase() const;
 private:
-	Piece piece_;
+	unique_ptr<Piece> piece_;
 };
