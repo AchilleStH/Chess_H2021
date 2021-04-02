@@ -28,7 +28,9 @@ int main()
 
 	echiquier.deplacerPiece(tour->position, Position(8, 3));
 
-	echiquier.deplacerPiece(cavalier->position, Position(8, 9));
+	echiquier.deplacerPiece(cavalier->position, Position(8, 8));
+
+	echiquier.retirerPiece(cavalier->position);
 
 	echiquier.afficher();
 }

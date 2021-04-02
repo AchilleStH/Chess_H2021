@@ -18,6 +18,7 @@ public:
 	Plateau();
 	void afficher();
 	void setPiece(std::shared_ptr<Piece> piece, Position pos);
+	void retirerPiece(Position pos);
 	void deplacerPiece(Position posActuelle, Position nouvellePos);
 	std::shared_ptr<Piece> getPiece(Position pos) const { return plateau[pos.x-1][pos.y-1]; }
 private:

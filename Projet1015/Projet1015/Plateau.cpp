@@ -29,13 +29,19 @@ void Plateau::afficher()
 
 void Plateau::setPiece(std::shared_ptr<Piece> piece, Position pos)
 {
-	if(pos.verifierPosition())
+	if(plateau[pos.x - 1][pos.y - 1] == nullptr)
 		plateau[pos.x-1][pos.y-1] = move(piece);
 }
 
+void Plateau::retirerPiece(Position pos)
+{
+	plateau[pos.x - 1][pos.y - 1] = nullptr;
+}
+
+
 void Plateau::deplacerPiece(Position posActuelle, Position nouvellePos)
 {
-	if (nouvellePos.verifierPosition() && plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationDeplacement(nouvellePos, *this))
+	if (plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationDeplacement(nouvellePos, *this))
 	{
 		plateau[posActuelle.x - 1][posActuelle.y - 1]->position = nouvellePos;
 		plateau[nouvellePos.x - 1][nouvellePos.y - 1] = plateau[posActuelle.x - 1][posActuelle.y - 1];
