@@ -16,10 +16,11 @@ int main()
 	cout << "DEBUT\n";
 	Plateau echiquier;
 	echiquier.setPiece(cavalier, cavalier->position);
+	echiquier.setPiece(roi, Position(7, 4));
 
 	echiquier.afficher();
 
-	echiquier.deplacerPiece(cavalier->position, Position(7, 5));
+	echiquier.deplacerPiece(cavalier->position, Position(7, 4));
 
 	echiquier.afficher();
 }

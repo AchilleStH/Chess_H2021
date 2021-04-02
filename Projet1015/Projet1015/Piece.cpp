@@ -84,7 +84,7 @@ bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau echiqu
 	}
 
 	// verification : cases possibles ne sont pas occupées par une pièce de la même couleur
-	if (echiquier.getPiece(nouvellePosition) != nullptr && echiquier.getPiece(nouvellePosition)->couleurPiece == couleurPiece)
+	if ((echiquier.getPiece(nouvellePosition) != nullptr) && (echiquier.getPiece(nouvellePosition)->couleurPiece == couleurPiece))
 		caseDisponible = false;
 
 	return (deplacementValide && caseDisponible);
