@@ -14,14 +14,8 @@ class Plateau;
 struct Position
 {
 	// Vérifie si une position est valide. (x et y compris entre 1 et 8)
-	Position(int x_, int y_)
-	{
-		if (x_ <= 8 && x_ >= 1 && y_ <= 8 && y_ >= 1)
-		{
-			x = x_;
-			y = y_;
-		}
-	};
+	Position(int x_, int y_) : x(x_), y(y_) {}
+	bool verifierPosition() { return (x <= 8 && x >= 1 && y <= 8 && y >= 1);}
 	int x = 1;
 	int y = 1;
 };
@@ -65,6 +59,8 @@ class Roi : public Piece
 public:
 	Roi(Couleur couleur, Position pos);
 	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+private:
+	std::pair<int, int> deplacementsPossibles[8] = { {-1, 0}, {-1, +1}, {0, +1}, {+1, +1}, {+1, 0}, {+1, -1}, {0, -1}, {-1, -1} };
 };
 
 // Class Reine
