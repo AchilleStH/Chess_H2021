@@ -10,27 +10,50 @@ using namespace std;
 
 int main()
 {
+	// initialisation d'une seed random
+	srand(time(NULL));
+	// Si on indique une position invalide, le programme throw une erreur : Position(0, 6), Position(2, -4), Position(12, 1) donnent des erreurs.
 
-	// BUG A CORRIGER : QUAND ON INITIALISE UNE PIECE AVEC UNE POSITION INVALIDE CA LE MET A 1:1 ET DONC IL PEUT SE DÉPLACER GENRE EN 1:2 SI C'EST UN ROI ALORS QUE FAUDRAIT PAS
-
-	shared_ptr<Piece> tour = make_shared<Tour>(Tour(Couleur::Blanc, Position(2, 3)));
+	shared_ptr<Piece> tour = make_shared<Tour>(Tour(Couleur::Noir, Position(6, 6)));
 	shared_ptr<Piece> roi = make_shared<Roi>(Roi(Couleur::Blanc, Position(7, 3)));
-	shared_ptr<Piece> cavalier = make_shared<Cavalier>(Cavalier(Couleur::Blanc, Position(7, 8)));
+	shared_ptr<Piece> cavalier = make_shared<Cavalier>(Cavalier(Couleur::Blanc, Position(4, 6)));
+
 	cout << "DEBUT\n";
 	Plateau echiquier;
-	echiquier.setPiece(cavalier, cavalier->position);
-	echiquier.setPiece(roi, roi->position);
+
+
 	echiquier.setPiece(tour, tour->position);
+	echiquier.setPiece(cavalier, cavalier->position);
 
 	echiquier.afficher();
+	//echiquier.plateauRandom();
 
-	echiquier.deplacerPiece(roi->position, Position(1, 2));
-
-	echiquier.deplacerPiece(tour->position, Position(8, 3));
-
-	echiquier.deplacerPiece(cavalier->position, Position(8, 8));
-
-	echiquier.retirerPiece(cavalier->position);
-
+	echiquier.deplacerPiece(Position(6, 6), Position(3, 6));
+	echiquier.deplacerPiece(Position(8, 8), Position(3, 6));
 	echiquier.afficher();
+
+
+	// => faire une fonction "checkPieceOneTheWay" 
+
+
+	//echiquier.plateauRandom();
+	//echiquier.afficher();
+
+	//echiquier.plateauRandom();
+	//echiquier.afficher();
+
+	//echiquier.plateauRandom();
+	//echiquier.afficher();
+
+	//echiquier.plateauRandom();
+	//echiquier.afficher();
+
+	//echiquier.plateauRandom();
+	//echiquier.afficher();
+
+	//echiquier.clearPlateau();
+	//echiquier.afficher();
+
+
+
 }

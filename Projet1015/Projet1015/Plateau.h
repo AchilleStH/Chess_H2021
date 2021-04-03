@@ -21,6 +21,8 @@ public:
 	void retirerPiece(Position pos);
 	void deplacerPiece(Position posActuelle, Position nouvellePos);
 	std::shared_ptr<Piece> getPiece(Position pos) const { return plateau[pos.x-1][pos.y-1]; }
+	void clearPlateau();
+	void plateauRandom();
 private:
 	std::shared_ptr<Piece> plateau[8][8] = { nullptr };
 };

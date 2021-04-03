@@ -13,7 +13,6 @@ class Plateau;
 // et y l'index de la colonne.
 struct Position
 {
-
 	// Vérifie si une position est valide. (x et y compris entre 1 et 8)
 	Position(int x_, int y_)
 	{
@@ -45,7 +44,6 @@ class Piece
 public: 
 	Piece() : position(Position(1, 1)), couleurPiece(Couleur::Default), mnemonique('x'){};
 	virtual bool verificationDeplacement(Position nouvellePosition, Plateau echiquier) = 0;
-	// A DES FINS DE DEBUGGAGE, A RETIRER
 	char getInfos() const;
 	Position position;
 	Couleur couleurPiece;
@@ -68,18 +66,19 @@ class Roi : public Piece
 public:
 	Roi(Couleur couleur, Position pos);
 	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+	bool estEnEchec = false;
 private:
 	std::pair<int, int> deplacementsPossibles[8] = { {-1, 0}, {-1, +1}, {0, +1}, {+1, +1}, {+1, 0}, {+1, -1}, {0, -1}, {-1, -1} };
 };
 
-// Class Reine
-// Une reine est une pièce
-class Reine : public Piece
-{
-public: 
-	Reine(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
-};
+
+// Pièce non implémentée
+//class Reine : public Piece
+//{
+//public: 
+//	Reine(Couleur couleur, Position pos);
+//	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+//};
 
 // Class Cavalier
 // Un cavalier est une pièce
@@ -93,11 +92,10 @@ private:
 };
 
 
-// Class Fou
-// Un fou est une pièce
-class Fou : public Piece
-{
-public:
-	Fou(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
-};
+// Pièce non implémentée
+//class Fou : public Piece
+//{
+//public:
+//	Fou(Couleur couleur, Position pos);
+//	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+//};

@@ -1,8 +1,8 @@
-#include "Piece.h"
+﻿#include "Piece.h"
 #include "Plateau.h"
+#include <math.h>
 
-
-// Implementation de la classe Piece et de ses d�riv�es
+// Implementation de la classe Piece et de ses dérivées
 
 
 
@@ -43,17 +43,35 @@ bool Tour::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 	else
 		deplacementValide = false;
 
-	while (true)
+	while (deplacementValide)
 	{
-		// on ajoute la direction
-		posTmp.x += direction.first;
-		posTmp.y += direction.second;
+		if (posTmp.x == nouvellePosition.x && posTmp.y == nouvellePosition.y)
+			break;
+		else
+		{
+			posTmp.x += direction.first;
+			posTmp.y += direction.second;
+		}
+		// On vérifie si une pièce est en chemin (en si il y a une pièce de la couleur
+		// opposée sur la case finale, on mange la pièce)
 		if (posTmp.x <= 8 && posTmp.x >= 1 && posTmp.y <= 8 && posTmp.y >= 1)
 		{
 			if ((echiquier.getPiece(posTmp) != nullptr))
 			{
-				caseDisponible = false;
-				return (deplacementValide && caseDisponible);
+				if (posTmp.x != nouvellePosition.x && posTmp.y != nouvellePosition.y)
+				{
+					caseDisponible = false;
+					return (deplacementValide && caseDisponible);
+				}
+				else if (echiquier.getPiece(nouvellePosition) != nullptr && \
+					echiquier.getPiece(nouvellePosition)->couleurPiece != couleurPiece)
+					caseDisponible = true;
+				else
+				{
+					caseDisponible = false;
+					return (deplacementValide && caseDisponible);
+				}
+
 			}
 		}
 		else
@@ -82,7 +100,7 @@ bool Roi::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 		if ((pairPos.first + position.x) == nouvellePosition.x && ((pairPos.second + position.y) == nouvellePosition.y))
 			deplacementValide = true;
 	}
-	// verification : cases possibles ne sont pas occup�es par une pi�ce de la m�me couleur
+	// verification : cases possibles ne sont pas occupées par une pièce de la même couleur
 	if ((echiquier.getPiece(nouvellePosition) != nullptr) && (echiquier.getPiece(nouvellePosition)->couleurPiece == couleurPiece))
 		caseDisponible = false;
 
@@ -92,19 +110,19 @@ bool Roi::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 
 
 
-
-Reine::Reine(Couleur couleur, Position pos)
-{
-	couleurPiece = couleur;
-	position = pos;
-	mnemonique = 'Q';
-}
-
-bool Reine::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
-{
-	// Pour l'instant, je met toujours le d�placement a true
-	return true;
-}
+// Pièce non implémentée
+//Reine::Reine(Couleur couleur, Position pos)
+//{
+//	couleurPiece = couleur;
+//	position = pos;
+//	mnemonique = 'Q';
+//}
+//
+//bool Reine::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
+//{
+//	// Pour l'instant, je met toujours le déplacement a true
+//	return true;
+//}
 
 
 
@@ -128,7 +146,7 @@ bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau echiqu
 			deplacementValide = true;
 	}
 
-	// verification : cases possibles ne sont pas occup�es par une pi�ce de la m�me couleur
+	// verification : cases possibles ne sont pas occupées par une pièce de la même couleur
 	if ((echiquier.getPiece(nouvellePosition) != nullptr) && (echiquier.getPiece(nouvellePosition)->couleurPiece == couleurPiece))
 		caseDisponible = false;
 
@@ -138,16 +156,78 @@ bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau echiqu
 
 
 
-
-Fou::Fou(Couleur couleur, Position pos)
-{
-	couleurPiece = couleur;
-	position = pos;
-	mnemonique = 'F';
-}
-
-bool Fou::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
-{
-	// Pour l'instant, je met toujours le d�placement a true
-	return true;
-}
+// Pièce non implémentée
+//Fou::Fou(Couleur couleur, Position pos)
+//{
+//	couleurPiece = couleur;
+//	position = pos;
+//	mnemonique = 'F';
+//}
+//
+//bool Fou::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
+//{
+//	bool deplacementLegal = false;
+//	bool caseDisponible = true;
+//	bool deplacementValide = true;
+//	Position posTmp = position;
+//
+//	std::pair<int, int> direction = { 0, 0 };
+//
+//	// Verification si la case est légale ( | x2 - x1 | = | y2 -y1 | > 0)
+//	int offsetX = abs(nouvellePosition.x - position.x);
+//	int offsetY = abs(nouvellePosition.y - position.y);
+//	if (offsetX == offsetY && offsetX > 0)
+//		deplacementLegal = true;
+//
+//
+//	if (deplacementLegal)
+//	{
+//		// trouver dans quel sens on va 
+//		if (nouvellePosition.x > position.x && nouvellePosition.y < position.y)
+//			direction = { +1, -1 };
+//		else if (nouvellePosition.x < position.x && nouvellePosition.y < position.y)
+//			direction = { +1, +1 };
+//		else if (nouvellePosition.x > position.x && nouvellePosition.y > position.y)
+//			direction = { -1, -1 };
+//		else if (nouvellePosition.x < position.x && nouvellePosition.y > position.y)
+//			direction = { -1, +1 };
+//		else
+//			deplacementValide = false;
+//	}
+//
+//	while (deplacementValide)
+//	{
+//		//On vérifie si une pièce est en chemin (en si il y a une pièce de la couleur
+//		//opposée sur la case finale, on mange la pièce)
+//		if (posTmp.x == nouvellePosition.x && posTmp.y == nouvellePosition.y)
+//			break;
+//		else
+//		{
+//			posTmp.x += direction.first;
+//			posTmp.y += direction.second;
+//		}
+//
+//		if (posTmp.x <= 8 && posTmp.x >= 1 && posTmp.y <= 8 && posTmp.y >= 1)
+//		{
+//			if ((echiquier.getPiece(posTmp) != nullptr))
+//			{
+//				if (posTmp.x != nouvellePosition.x && posTmp.y != nouvellePosition.y)
+//				{
+//					caseDisponible = false;
+//					return (deplacementValide && caseDisponible);
+//				}
+//				else if (echiquier.getPiece(nouvellePosition)->couleurPiece != couleurPiece)
+//					caseDisponible = true;
+//				else
+//				{
+//					caseDisponible = false;
+//					return (deplacementValide && caseDisponible);
+//				}
+//					
+//			}
+//		}
+//		else
+//			break;
+//	}
+//	return (deplacementValide && caseDisponible && deplacementLegal);
+//}
