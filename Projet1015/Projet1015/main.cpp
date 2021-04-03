@@ -21,38 +21,29 @@ int main()
 	cout << "DEBUT\n";
 	Plateau echiquier;
 
-
-	echiquier.setPiece(tour, tour->position);
-	echiquier.setPiece(cavalier, cavalier->position);
+	echiquier.plateauRandom();
 
 	echiquier.afficher();
-	//echiquier.plateauRandom();
 
-	echiquier.deplacerPiece(Position(6, 6), Position(3, 6));
-	echiquier.deplacerPiece(Position(8, 8), Position(3, 6));
+
+
+	echiquier.plateauRandom();
 	echiquier.afficher();
 
+	echiquier.plateauRandom();
+	echiquier.afficher();
 
-	// => faire une fonction "checkPieceOneTheWay" 
+	echiquier.plateauRandom();
+	echiquier.afficher();
 
+	echiquier.plateauRandom();
+	echiquier.afficher();
 
-	//echiquier.plateauRandom();
-	//echiquier.afficher();
+	echiquier.plateauRandom();
+	echiquier.afficher();
 
-	//echiquier.plateauRandom();
-	//echiquier.afficher();
-
-	//echiquier.plateauRandom();
-	//echiquier.afficher();
-
-	//echiquier.plateauRandom();
-	//echiquier.afficher();
-
-	//echiquier.plateauRandom();
-	//echiquier.afficher();
-
-	//echiquier.clearPlateau();
-	//echiquier.afficher();
+	echiquier.clearPlateau();
+	echiquier.afficher();
 
 
 

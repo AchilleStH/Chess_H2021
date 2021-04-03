@@ -24,6 +24,7 @@ struct Position
 		else
 			throw std::runtime_error("Position Invalide");
 	}
+	Position(){ x = 1; y = 1;}
 	int x = 1;
 	int y = 1;
 };
@@ -31,7 +32,7 @@ struct Position
 // enum class Couleur
 // Enumération permettant de définir la couleur d'une
 // pièce. Une pièce peut être Blanche ou Noire.
-enum class Couleur {Blanc, Noir, Default};
+enum class Couleur {Blanc, Noir};
 
 // class Piece
 // Chaque pièce possède une position, une couleur,
@@ -42,7 +43,7 @@ enum class Couleur {Blanc, Noir, Default};
 class Piece
 {
 public: 
-	Piece() : position(Position(1, 1)), couleurPiece(Couleur::Default), mnemonique('x'){};
+	Piece() { couleurPiece = Couleur::Blanc; mnemonique = ' '; };
 	virtual bool verificationDeplacement(Position nouvellePosition, Plateau echiquier) = 0;
 	char getInfos() const;
 	Position position;
