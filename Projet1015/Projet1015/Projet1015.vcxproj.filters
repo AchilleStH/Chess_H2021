@@ -24,18 +24,12 @@
     <ClCompile Include="Plateau.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Case.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Piece.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Plateau.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Case.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

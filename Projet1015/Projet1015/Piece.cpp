@@ -6,12 +6,12 @@
 
 
 
-char Piece::getInfos() const
+const char * Piece::getInfos() const
 {
 	if (this != nullptr)
 		return mnemonique;
 	else
-		return 'x';
+		return "#";
 }
 
 
@@ -20,7 +20,18 @@ Tour::Tour(Couleur couleur, Position pos)
 {
 	couleurPiece = couleur;
 	position = pos;
-	mnemonique = 'T';
+	switch (couleur)
+	{
+	case Couleur::Blanc:
+		mnemonique = "\033[1m\033[31mT\033[0m";
+		break;
+	case Couleur::Noir:
+		mnemonique = "\033[1m\033[32mT\033[0m";
+		break;
+	default:
+		mnemonique = "#";
+		break;
+	}
 }
 
 bool Tour::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
@@ -30,6 +41,39 @@ bool Tour::verificationDeplacement(Position nouvellePosition, Plateau &echiquier
 	Position posTmp = position;
 
 	std::pair<int, int> direction = { 0, 0 };
+
+	//verification échec
+	if (echiquier.roiEnEchec(couleurPiece))
+	{
+		std::unique_ptr<Piece> tmpTour = std::make_unique<Tour>(Tour(couleurPiece, nouvellePosition));
+		if (echiquier.getPiece(nouvellePosition) != nullptr)
+		{
+			std::unique_ptr<Piece> sauvegardeCase = move(echiquier.getPiece(nouvellePosition));
+			echiquier.retirerPiece(nouvellePosition);
+			echiquier.setPiece(tmpTour, tmpTour->position);
+			if (echiquier.roiEnEchec(couleurPiece))
+			{
+				echiquier.retirerPiece(nouvellePosition);
+				echiquier.setPiece(sauvegardeCase, nouvellePosition);
+				return false;
+			}
+			echiquier.retirerPiece(nouvellePosition);
+			echiquier.setPiece(sauvegardeCase, nouvellePosition);
+		}
+		else
+		{
+			echiquier.setPiece(tmpTour, tmpTour->position);
+			if (echiquier.roiEnEchec(couleurPiece))
+			{
+				echiquier.retirerPiece(nouvellePosition);
+				return false;
+			}
+			echiquier.retirerPiece(nouvellePosition);
+		}
+
+
+	}
+
 
 	// trouver dans quel sens on va 
 	if ((position.x == nouvellePosition.x) && (position.y > nouvellePosition.y))
@@ -58,7 +102,7 @@ bool Tour::verificationDeplacement(Position nouvellePosition, Plateau &echiquier
 		{
 			if ((echiquier.getPiece(posTmp) != nullptr))
 			{
-				if (posTmp.x != nouvellePosition.x && posTmp.y != nouvellePosition.y)
+				if (posTmp.x != nouvellePosition.x || posTmp.y != nouvellePosition.y)
 				{
 					caseDisponible = false;
 					return (deplacementValide && caseDisponible);
@@ -87,7 +131,18 @@ Roi::Roi(Couleur couleur, Position pos)
 {
 	couleurPiece = couleur;
 	position = pos;
-	mnemonique = 'R';
+	switch (couleur)
+	{
+	case Couleur::Blanc:
+		mnemonique = "\033[1m\033[31mR\033[0m";
+		break;
+	case Couleur::Noir:
+		mnemonique = "\033[1m\033[32mR\033[0m";
+		break;
+	default:
+		mnemonique = "#";
+		break;
+	}
 }
 
 bool Roi::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
@@ -104,7 +159,7 @@ bool Roi::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
 	if ((echiquier.getPiece(nouvellePosition) != nullptr) && (echiquier.getPiece(nouvellePosition)->couleurPiece == couleurPiece))
 		caseDisponible = false;
 
-	return (deplacementValide && caseDisponible);
+	return (deplacementValide && caseDisponible && !echiquier.roiEnEchec(couleurPiece));
 }
 
 
@@ -148,7 +203,18 @@ Cavalier::Cavalier(Couleur couleur, Position pos)
 {
 	couleurPiece = couleur;
 	position = pos;
-	mnemonique = 'C';
+	switch (couleur)
+	{
+	case Couleur::Blanc:
+		mnemonique = "\033[1m\033[31mC\033[0m";
+		break;
+	case Couleur::Noir:
+		mnemonique = "\033[1m\033[32mC\033[0m";
+		break;
+	default:
+		mnemonique = "#";
+		break;
+	}
 }
 
 bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
@@ -166,7 +232,7 @@ bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau &echiq
 	if ((echiquier.getPiece(nouvellePosition) != nullptr) && (echiquier.getPiece(nouvellePosition)->couleurPiece == couleurPiece))
 		caseDisponible = false;
 
-	return (deplacementValide && caseDisponible);
+	return (deplacementValide && caseDisponible && !echiquier.roiEnEchec(couleurPiece)); // && !echiquier.roiEnEchec(couleurPiece)
 }
 
 

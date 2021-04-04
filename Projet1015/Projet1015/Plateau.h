@@ -14,15 +14,16 @@
 class Plateau
 {
 public:
-	// SUPPRIMER CETTE MÉTHODE
 	Plateau();
 	void afficher();
 	void setPiece(std::unique_ptr<Piece>& piece, Position pos);
 	void retirerPiece(Position pos);
 	void deplacerPiece(Position posActuelle, Position nouvellePos);
 	std::unique_ptr<Piece>& getPiece(Position pos) { return plateau[pos.x-1][pos.y-1]; }
-	void clearPlateau();
-	void plateauRandom();
+	void clearPlateau(Couleur couleur);
+	void plateauRandom(Couleur couleur);
+	bool roiEnEchec(Couleur couleur);
+	//bool checkMate(Couleur couleur);
 private:
 	std::unique_ptr<Piece> plateau[8][8] = { nullptr };
 };

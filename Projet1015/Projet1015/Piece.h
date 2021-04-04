@@ -53,12 +53,12 @@ inline Couleur operator!(Couleur C)
 class Piece
 {
 public: 
-	Piece() { couleurPiece = Couleur::Blanc; mnemonique = ' '; };
+	Piece() { couleurPiece = Couleur::Blanc; mnemonique = " "; };
 	virtual bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier) = 0;
-	char getInfos() const;
+	const char* getInfos() const;
 	Position position;
 	Couleur couleurPiece;
-	char mnemonique;
+	const char* mnemonique;
 };
 
 // Class Tour
