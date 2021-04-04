@@ -29,10 +29,10 @@ void Plateau::afficher()
 }
 
 
-void Plateau::setPiece(std::shared_ptr<Piece> piece, Position pos)
+void Plateau::setPiece(std::unique_ptr<Piece>& piece, Position pos)
 {
 	if(plateau[pos.x - 1][pos.y - 1] == nullptr)
-		plateau[pos.x-1][pos.y-1] = move(piece);
+		plateau[pos.x-1][pos.y-1] = std::move(piece);
 }
 
 void Plateau::retirerPiece(Position pos)
@@ -47,9 +47,7 @@ void Plateau::deplacerPiece(Position posActuelle, Position nouvellePos)
 	if (plateau[posActuelle.x - 1][posActuelle.y - 1] != nullptr && \
 		plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationDeplacement(nouvellePos, *this))
 	{
-		plateau[posActuelle.x - 1][posActuelle.y - 1]->position = nouvellePos;
-		plateau[nouvellePos.x - 1][nouvellePos.y - 1] = plateau[posActuelle.x - 1][posActuelle.y - 1];
-		plateau[posActuelle.x - 1][posActuelle.y - 1] = nullptr;
+		plateau[nouvellePos.x - 1][nouvellePos.y - 1] = std::move(getPiece(posActuelle));
 	}
 }
 
@@ -67,16 +65,18 @@ void Plateau::clearPlateau()
 void Plateau::plateauRandom()
 {
 	clearPlateau();
-	Position randomPos = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
-	setPiece(std::make_shared<Roi>(Roi(Couleur::Blanc, randomPos)), randomPos);
+	Position randomPosRoi = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
+	std::unique_ptr<Piece> roi = std::make_unique<Roi>(Roi(Couleur::Blanc, randomPosRoi));
+	setPiece(roi, randomPosRoi);
 
 	// On s'assure que la case sur laquelle on ajoute un pièce n'est pas déja occupée 
 	while (true)
 	{
-		randomPos = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
-		if (plateau[randomPos.x - 1][randomPos.y - 1] == nullptr)
+		Position randomPosCaval = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
+		if (plateau[randomPosCaval.x - 1][randomPosCaval.y - 1] == nullptr)
 		{
-			setPiece(std::make_shared<Cavalier>(Cavalier(Couleur::Blanc, randomPos)), randomPos);
+			std::unique_ptr<Piece> cavalier = std::make_unique<Cavalier>(Cavalier(Couleur::Blanc, randomPosCaval));
+			setPiece(cavalier, randomPosCaval);
 			break;
 		}
 	}
@@ -84,10 +84,11 @@ void Plateau::plateauRandom()
 	// On s'assure que la case sur laquelle on ajoute un pièce n'est pas déja occupée 
 	while (true)
 	{
-		randomPos = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
-		if (plateau[randomPos.x - 1][randomPos.y - 1] == nullptr)
+		Position randomPosTour = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
+		if (plateau[randomPosTour.x - 1][randomPosTour.y - 1] == nullptr)
 		{
-			setPiece(std::make_shared<Tour>(Tour(Couleur::Blanc, randomPos)), randomPos);
+			std::unique_ptr<Piece> tour = std::make_unique<Tour>(Tour(Couleur::Blanc, randomPosTour));
+			setPiece(tour, randomPosTour);
 			break;
 		}
 	}

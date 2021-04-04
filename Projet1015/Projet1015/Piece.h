@@ -34,6 +34,16 @@ struct Position
 // pièce. Une pièce peut être Blanche ou Noire.
 enum class Couleur {Blanc, Noir};
 
+inline Couleur operator!(Couleur C) 
+{
+	switch (C) 
+	{
+	case Couleur::Blanc: return Couleur::Noir;
+	case Couleur::Noir: return Couleur::Blanc;
+	default: return Couleur::Blanc;
+	}
+}
+
 // class Piece
 // Chaque pièce possède une position, une couleur,
 // ainsi qu'un mnemonique (R pour roi, Q pour reine...)
@@ -44,7 +54,7 @@ class Piece
 {
 public: 
 	Piece() { couleurPiece = Couleur::Blanc; mnemonique = ' '; };
-	virtual bool verificationDeplacement(Position nouvellePosition, Plateau echiquier) = 0;
+	virtual bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier) = 0;
 	char getInfos() const;
 	Position position;
 	Couleur couleurPiece;
@@ -57,7 +67,7 @@ class Tour : public Piece
 {
 public:
 	Tour(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
 };
 
 // Class Roi
@@ -66,12 +76,24 @@ class Roi : public Piece
 {
 public:
 	Roi(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
-	bool estEnEchec = false;
+	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
+	bool verificationEchec(Plateau &echiquier);
+
 private:
 	std::pair<int, int> deplacementsPossibles[8] = { {-1, 0}, {-1, +1}, {0, +1}, {+1, +1}, {+1, 0}, {+1, -1}, {0, -1}, {-1, -1} };
+	bool estEnEchec = false;
 };
 
+// Class Cavalier
+// Un cavalier est une pièce
+class Cavalier : public Piece
+{
+public:
+	Cavalier(Couleur couleur, Position pos);
+	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
+private:
+	std::pair<int, int> deplacementsPossibles[8] = { {-2, -1}, {-1, -2}, {+1, -2}, {-2, +1}, {-1, +2}, {+1, +2}, {+2, +1}, {+2, -1} };
+};
 
 // Pièce non implémentée
 //class Reine : public Piece
@@ -80,17 +102,6 @@ private:
 //	Reine(Couleur couleur, Position pos);
 //	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
 //};
-
-// Class Cavalier
-// Un cavalier est une pièce
-class Cavalier : public Piece
-{
-public:
-	Cavalier(Couleur couleur, Position pos);
-	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
-private:
-	std::pair<int, int> deplacementsPossibles[8] = { {-2, -1}, {-1, -2}, {+1, -2}, {-2, +1}, {-1, +2}, {+1, +2}, {+2, +1}, {+2, -1} };
-};
 
 
 // Pièce non implémentée

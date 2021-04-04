@@ -23,7 +23,7 @@ Tour::Tour(Couleur couleur, Position pos)
 	mnemonique = 'T';
 }
 
-bool Tour::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
+bool Tour::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
 {
 	bool caseDisponible = true;
 	bool deplacementValide = true;
@@ -90,7 +90,7 @@ Roi::Roi(Couleur couleur, Position pos)
 	mnemonique = 'R';
 }
 
-bool Roi::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
+bool Roi::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
 {
 	bool deplacementValide = false;
 	bool caseDisponible = true;
@@ -108,7 +108,23 @@ bool Roi::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
 }
 
 
-
+bool Roi::verificationEchec(Plateau &echiquier)
+{
+	estEnEchec = false;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			Position posActuelle = Position(i + 1, j + 1);
+			if (echiquier.getPiece(posActuelle) != nullptr && echiquier.getPiece(posActuelle)->couleurPiece != couleurPiece)
+			{
+				if (echiquier.getPiece(posActuelle)->verificationDeplacement(position, echiquier))
+					estEnEchec = true;
+			}
+		}
+	}
+	return estEnEchec;
+}
 
 // Pièce non implémentée
 //Reine::Reine(Couleur couleur, Position pos)
@@ -135,7 +151,7 @@ Cavalier::Cavalier(Couleur couleur, Position pos)
 	mnemonique = 'C';
 }
 
-bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau echiquier)
+bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
 {
 	bool deplacementValide = false;
 	bool caseDisponible = true;
