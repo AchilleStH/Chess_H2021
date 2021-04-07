@@ -1,3 +1,7 @@
+// ENTETE DE FICHIER
+
+
+
 #pragma once
 
 #include <iostream>
@@ -9,7 +13,7 @@ class Plateau;
 
 // struct Position
 // Structure qui permet de définir une position à l'aide de
-// deux coordonées x et y => x représente l'index de la ligne
+// deux coordonées x et y. x représente l'index de la ligne
 // et y l'index de la colonne.
 struct Position
 {
@@ -32,29 +36,21 @@ struct Position
 // enum class Couleur
 // Enumération permettant de définir la couleur d'une
 // pièce. Une pièce peut être Blanche ou Noire.
-enum class Couleur {Blanc, Noir};
+enum class Couleur { Blanc, Noir };
 
-inline Couleur operator!(Couleur C) 
-{
-	switch (C) 
-	{
-	case Couleur::Blanc: return Couleur::Noir;
-	case Couleur::Noir: return Couleur::Blanc;
-	default: return Couleur::Blanc;
-	}
-}
+
 
 // class Piece
 // Chaque pièce possède une position, une couleur,
-// ainsi qu'un mnemonique (R pour roi, Q pour reine...)
-// verificationDeplacement permet de vérifier la validité
-// d'un déplacement. deplacement modifie la position
-// de la pièce.
+// ainsi qu'un mnemonique (R pour roi, C pour cavalier...)
 class Piece
 {
 public: 
 	Piece() { couleurPiece = Couleur::Blanc; mnemonique = " "; };
+	virtual ~Piece() = default;
 	virtual bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier) = 0;
+	bool verificationEchecDeplacement(Position nouvellePosition, Plateau& echiquier);
+	bool verificationEchecPin(Position nouvellePosition, Plateau& echiquier);
 	const char* getInfos() const;
 	Position position;
 	Couleur couleurPiece;
@@ -68,6 +64,7 @@ class Tour : public Piece
 public:
 	Tour(Couleur couleur, Position pos);
 	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
+	std::pair<int, int> determinerDirection(Position nouvellePosition);
 };
 
 // Class Roi
@@ -77,11 +74,10 @@ class Roi : public Piece
 public:
 	Roi(Couleur couleur, Position pos);
 	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
-	bool verificationEchec(Plateau &echiquier);
-
+	bool verificationEchecDeplacement(Position nouvellePosition, Plateau& echiquier);
+	bool verificationEchec(Plateau& echiquier);
 private:
 	std::pair<int, int> deplacementsPossibles[8] = { {-1, 0}, {-1, +1}, {0, +1}, {+1, +1}, {+1, 0}, {+1, -1}, {0, -1}, {-1, -1} };
-	bool estEnEchec = false;
 };
 
 // Class Cavalier
@@ -100,7 +96,7 @@ private:
 //{
 //public: 
 //	Reine(Couleur couleur, Position pos);
-//	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+//	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
 //};
 
 
@@ -109,5 +105,5 @@ private:
 //{
 //public:
 //	Fou(Couleur couleur, Position pos);
-//	bool verificationDeplacement(Position nouvellePosition, Plateau echiquier);
+//	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
 //};

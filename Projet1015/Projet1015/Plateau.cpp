@@ -1,23 +1,29 @@
 #include "Plateau.h"
 #include "Piece.h"
 #include<cstdlib>
-// Implementation de la classe Plateau
+
+// Implémentation de la classe Plateau
+
+// Plateau() 
+// Constructeur de la classe Plateau
 Plateau::Plateau() 
 {
 	// Initialisation d'une seed aléatoire (pour rand())
 	srand((unsigned)time(0));
+
 	for (int i = 0; i < 8; i++)
-	{
 		for (int j = 0; j < 8; j++)
-		{
 			plateau[i][j] = nullptr;
-		}
-	}
 }
+
+// afficher()
+// Permet d'afficher l'état actuel de l'échiquier.
+// Cette méthode n'influe pas sur la logique du
+// jeu et est principallement utilisée a des fins
+// de débugage.
 void Plateau::afficher()
 {
 	for (int i = 0; i < 8; i++)
-	{
 		for (int j = 0; j < 8; j++)
 		{
 			if((i + j) % 2)
@@ -27,78 +33,52 @@ void Plateau::afficher()
 			if (j == 7)
 				std::cout << std::endl;
 		}
-	}
 	std::cout << std::endl;
 }
 
 
+// setPiece(std::unique_ptr<Piece>& piece, Position pos)
+// Méthode permettant d'ajouter une pièce sur 
+// une case vide du plateau.
 void Plateau::setPiece(std::unique_ptr<Piece>& piece, Position pos)
 {
 	if(plateau[pos.x - 1][pos.y - 1] == nullptr)
 		plateau[pos.x-1][pos.y-1] = std::move(piece);
 }
 
+
+// retirerPiece(Position pos)
+// Permet de retirer une pièce du plateau
 void Plateau::retirerPiece(Position pos)
 {
 	plateau[pos.x - 1][pos.y - 1] = nullptr;
 }
 
-
+// deplacerPiece(Position posActuelle, Position nouvellePos)
+// Si le mouvement indiqué en paramètre est valide,
+// cette méthode déplace la pièce sur la case voulue.
 void Plateau::deplacerPiece(Position posActuelle, Position nouvellePos)
 {
-	// ICI VÉRIFIER QUE LA PIECE EST PAS NULLPTR
-	if (plateau[posActuelle.x - 1][posActuelle.y - 1] != nullptr && \
-		plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationDeplacement(nouvellePos, *this))
+	if (dynamic_cast<Roi*>(getPiece(posActuelle).get()) == nullptr)
 	{
-		plateau[nouvellePos.x - 1][nouvellePos.y - 1] = std::move(getPiece(posActuelle));
-		getPiece(nouvellePos)->position = nouvellePos;
-	}
-}
-
-void Plateau::clearPlateau(Couleur couleur)
-{
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
+		if (plateau[posActuelle.x - 1][posActuelle.y - 1] != nullptr && \
+			plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationDeplacement(nouvellePos, *this) && \
+			plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationEchecDeplacement(nouvellePos, *this) && \
+			plateau[posActuelle.x - 1][posActuelle.y - 1]->verificationEchecPin(nouvellePos, *this))
 		{
-			if(plateau[i][j] != nullptr && plateau[i][j]->couleurPiece == couleur)
-				plateau[i][j] = nullptr;
+			plateau[nouvellePos.x - 1][nouvellePos.y - 1] = std::move(getPiece(posActuelle));
+			getPiece(nouvellePos)->position = nouvellePos;
 		}
 	}
-}
-
-void Plateau::plateauRandom(Couleur couleur)
-{
-	clearPlateau(couleur);
-	Position randomPosRoi = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
-	std::unique_ptr<Piece> roi = std::make_unique<Roi>(Roi(couleur, randomPosRoi));
-	setPiece(roi, randomPosRoi);
-
-	// On s'assure que la case sur laquelle on ajoute un pièce n'est pas déja occupée 
-	while (true)
-	{
-		Position randomPosCaval = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
-		if (plateau[randomPosCaval.x - 1][randomPosCaval.y - 1] == nullptr)
+	else
+		if (dynamic_cast<Roi*>(getPiece(posActuelle).get())->verificationEchecDeplacement(nouvellePos, *this) && \
+			getPiece(posActuelle)->verificationDeplacement(nouvellePos, *this) && \
+			getPiece(posActuelle)->verificationEchecPin(nouvellePos, *this))
 		{
-			std::unique_ptr<Piece> cavalier = std::make_unique<Cavalier>(Cavalier(couleur, randomPosCaval));
-			setPiece(cavalier, randomPosCaval);
-			break;
+			plateau[nouvellePos.x - 1][nouvellePos.y - 1] = std::move(getPiece(posActuelle));
+			getPiece(nouvellePos)->position = nouvellePos;
 		}
-	}
-
-	// On s'assure que la case sur laquelle on ajoute un pièce n'est pas déja occupée 
-	while (true)
-	{
-		Position randomPosTour = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
-		if (plateau[randomPosTour.x - 1][randomPosTour.y - 1] == nullptr)
-		{
-			std::unique_ptr<Piece> tour = std::make_unique<Tour>(Tour(couleur, randomPosTour));
-			setPiece(tour, randomPosTour);
-			break;
-		}
-	}
 }
-
 
 bool Plateau::roiEnEchec(Couleur couleur)
 {
@@ -128,21 +108,49 @@ bool Plateau::roiEnEchec(Couleur couleur)
 	return false;
 }
 
-// Beta testing
-//bool Plateau::checkMate(Couleur couleur)
-//{
-//	bool checkmate = true;
-//	if (!roiEnEchec(couleur))
-//		checkmate = false;
-//	else
-//	{
-//		for (int i = 0; i < 8; i++)
-//			for (int j = 0; j < 8; j++)
-//				for (int k = 0; k < 8; k++)
-//					for (int u = 0; u < 8; u++)
-//						if (plateau[i][j] != nullptr && plateau[i][j]->couleurPiece == couleur)
-//							if (plateau[i][j]->verificationDeplacement(Position(k + 1, u + 1), *this))
-//								checkmate = false;
-//	}
-//	return checkmate;
-//}
+// clearPlateau(Couleur couleur)
+// Permet de retirer du plateau toutes les pièces
+// d'une certaine couleur
+void Plateau::clearPlateau(Couleur couleur)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if(plateau[i][j] != nullptr && plateau[i][j]->couleurPiece == couleur)
+				plateau[i][j] = nullptr;
+		}
+	}
+}
+
+// setRandomPiece(std::unique_ptr<Piece>& piece)
+// Permet de placer aléatoirement sur le Plateau
+// la pièce indiquée en paramètre.
+void Plateau::setRandomPiece(std::unique_ptr<Piece>& piece)
+{
+	while (true)
+	{
+		Position randomPos = Position(((rand() % 8) + 1), ((rand() % 8) + 1));
+		if (plateau[randomPos.x - 1][randomPos.y - 1] == nullptr)
+		{
+			piece->position = randomPos;
+			setPiece(piece, randomPos);
+			break;
+		}
+	}
+}
+
+// plateauRandom(Couleur couleur)
+// Méthode permettant de placer aléatoirement un roi,
+// un cavalier et une tour de couleur choisie, en 
+// enlevant les pièces de cette dernière déjà présentes.
+void Plateau::plateauRandom(Couleur couleur)
+{
+	clearPlateau(couleur);
+	std::unique_ptr<Piece> tour = std::make_unique<Tour>(Tour(couleur, Position()));
+	std::unique_ptr<Piece> cavalier = std::make_unique<Cavalier>(Cavalier(couleur, Position()));
+	std::unique_ptr<Piece> roi = std::make_unique<Roi>(Roi(couleur, Position()));
+	setRandomPiece(tour);
+	setRandomPiece(cavalier);
+	setRandomPiece(roi);
+}
