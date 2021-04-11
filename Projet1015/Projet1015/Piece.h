@@ -91,19 +91,27 @@ private:
 	std::pair<int, int> deplacementsPossibles[8] = { {-2, -1}, {-1, -2}, {+1, -2}, {-2, +1}, {-1, +2}, {+1, +2}, {+2, +1}, {+2, -1} };
 };
 
-// Pièce non implémentée
-//class Reine : public Piece
-//{
-//public: 
-//	Reine(Couleur couleur, Position pos);
-//	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
-//};
+
+class Reine : public Piece
+{
+public: 
+	Reine(Couleur couleur, Position pos);
+	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
+	std::pair<int, int> determinerDirection(Position nouvellePosition);
+};
 
 
-// Pièce non implémentée
-//class Fou : public Piece
-//{
-//public:
-//	Fou(Couleur couleur, Position pos);
-//	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
-//};
+class Fou : public Piece
+{
+public:
+	Fou(Couleur couleur, Position pos);
+	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
+	std::pair<int, int> determinerDirection(Position nouvellePosition);
+};
+
+class Pion : public Piece
+{
+public:
+	Pion(Couleur couleur, Position pos);
+	bool verificationDeplacement(Position nouvellePosition, Plateau &echiquier);
+};

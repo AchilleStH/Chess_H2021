@@ -289,3 +289,250 @@ bool Cavalier::verificationDeplacement(Position nouvellePosition, Plateau &echiq
 
 	return (deplacementValide && caseDisponible);
 }
+
+// Reine(Couleur couleur, Position pos)
+// Constructeur de la classe Reine
+Reine::Reine(Couleur couleur, Position pos)
+{
+	couleurPiece = couleur;
+	position = pos;
+	switch (couleur)
+	{
+	case Couleur::Blanc:
+		mnemonique = "\033[1m\033[31mQ\033[0m";
+		break;
+	case Couleur::Noir:
+		mnemonique = "\033[1m\033[32mQ\033[0m";
+		break;
+	default:
+		mnemonique = "#";
+		break;
+	}
+}
+
+// determinerDirection(Position nouvellePosition)
+// Méthode de Reine permettant de déterminer la direction d'un 
+// mouvement vers une position donnée.
+std::pair<int, int> Reine::determinerDirection(Position nouvellePosition)
+{
+	int diffX = nouvellePosition.x - position.x;
+	int diffY = nouvellePosition.y - position.y;
+
+	if (diffX != 0)
+		diffX /= abs(diffX);
+
+	if (diffY != 0)
+		diffY /= abs(diffY);
+
+	return { diffX, diffY };
+}
+
+// verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
+// Méthode de Reine permettant de déterminer si un déplacement vers
+// une position donnée est possible (Sans prendre en compte les échecs)
+bool Reine::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
+{
+	bool caseDisponible = true;
+	bool deplacementValide = true;
+	Position posTmp = position;
+
+	std::pair<int, int> direction = determinerDirection(nouvellePosition);
+
+	if ((!(direction.first && direction.second) && (direction.first != 0 || direction.second != 0)) || (direction.first != 0 && direction.second != 0))
+	{
+		while (true)
+		{
+			if (posTmp.x == nouvellePosition.x && posTmp.y == nouvellePosition.y)
+				break;
+			else
+			{
+				posTmp.x += direction.first;
+				posTmp.y += direction.second;
+			}
+			// verification : une pièce est en chemin (et si il y a une pièce de la couleur
+			// opposée sur la case finale, on mange la pièce)
+			if ((echiquier.getPiece(posTmp) != nullptr))
+				if (posTmp.x != nouvellePosition.x || posTmp.y != nouvellePosition.y)
+					return false;
+				else if (echiquier.getPiece(nouvellePosition) != nullptr && \
+					echiquier.getPiece(nouvellePosition)->couleurPiece != couleurPiece)
+					caseDisponible = true;
+				else
+					caseDisponible = false;
+		}
+	}
+	else
+		deplacementValide = false;
+	return (deplacementValide && caseDisponible);
+}
+
+// Fou(Couleur couleur, Position pos)
+// Constructeur de la classe Fou
+Fou::Fou(Couleur couleur, Position pos)
+{
+couleurPiece = couleur;
+position = pos;
+switch (couleur)
+{
+case Couleur::Blanc:
+	mnemonique = "\033[1m\033[31mF\033[0m";
+	break;
+case Couleur::Noir:
+	mnemonique = "\033[1m\033[32mF\033[0m";
+	break;
+default:
+	mnemonique = "#";
+	break;
+}
+}
+
+// determinerDirection(Position nouvellePosition)
+// Méthode de Fou permettant de déterminer la direction d'un 
+// mouvement vers une position donnée.
+std::pair<int, int> Fou::determinerDirection(Position nouvellePosition)
+{
+	int diffX = nouvellePosition.x - position.x;
+	int diffY = nouvellePosition.y - position.y;
+
+	if (diffX != 0)
+		diffX /= abs(diffX);
+
+	if (diffY != 0)
+		diffY /= abs(diffY);
+
+	return { diffX, diffY };
+}
+
+// verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
+// Méthode de Fou permettant de déterminer si un déplacement vers
+// une position donnée est possible (Sans prendre en compte les échecs)
+bool Fou::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
+{
+	bool caseDisponible = true;
+	bool deplacementValide = true;
+	Position posTmp = position;
+
+	std::pair<int, int> direction = determinerDirection(nouvellePosition);
+
+	if (direction.first != 0 && direction.second != 0)
+	{
+		while (true)
+		{
+			if (posTmp.x == nouvellePosition.x && posTmp.y == nouvellePosition.y)
+				break;
+			else
+			{
+				posTmp.x += direction.first;
+				posTmp.y += direction.second;
+			}
+			// verification : une pièce est en chemin (et si il y a une pièce de la couleur
+			// opposée sur la case finale, on mange la pièce)
+			if ((echiquier.getPiece(posTmp) != nullptr))
+				if (posTmp.x != nouvellePosition.x || posTmp.y != nouvellePosition.y)
+					return false;
+				else if (echiquier.getPiece(nouvellePosition) != nullptr && \
+					echiquier.getPiece(nouvellePosition)->couleurPiece != couleurPiece)
+					caseDisponible = true;
+				else
+					caseDisponible = false;
+		}
+	}
+	else
+		deplacementValide = false;
+	return (deplacementValide && caseDisponible);
+}
+
+// Pion(Couleur couleur, Position pos)
+// Constructeur de la classe Pion
+Pion::Pion(Couleur couleur, Position pos)
+{
+	couleurPiece = couleur;
+	position = pos;
+	switch (couleur)
+	{
+	case Couleur::Blanc:
+		mnemonique = "\033[1m\033[31mP\033[0m";
+		break;
+	case Couleur::Noir:
+		mnemonique = "\033[1m\033[32mP\033[0m";
+		break;
+	default:
+		mnemonique = "#";
+		break;
+	}
+}
+
+bool Pion::verificationDeplacement(Position nouvellePosition, Plateau &echiquier)
+{
+	bool caseDisponible = false;
+	bool deplacementValide = false;
+	bool diagonale = false;
+	bool saut = false;
+	int direction = 0;
+	Position posTmp = position;
+
+	switch (couleurPiece)
+	{
+	case Couleur::Noir:
+		if (posTmp.y + 1 == nouvellePosition.y && posTmp.x == nouvellePosition.x)
+			deplacementValide = true;
+		else if (posTmp.y + 2 == nouvellePosition.y && posTmp.y == 2)
+		{
+			deplacementValide = true;
+			saut = true;
+			direction = 1;
+		}
+		else if (posTmp.y + 1 == nouvellePosition.y && posTmp.x + 1 == nouvellePosition.x)
+		{
+			deplacementValide = true;
+			diagonale = true;
+		}
+		else if (posTmp.y + 1 == nouvellePosition.y && posTmp.x - 1 == nouvellePosition.x)
+		{
+			deplacementValide = true;
+			diagonale = true;
+		}
+		break;
+	case Couleur::Blanc:
+		if (posTmp.y - 1 == nouvellePosition.y && posTmp.x == nouvellePosition.x)
+			deplacementValide = true;
+		else if (posTmp.y - 2 == nouvellePosition.y && posTmp.y == 7)
+		{
+			deplacementValide = true;
+			saut = true;
+			direction = -1;
+		}
+		else if (posTmp.y - 1 == nouvellePosition.y && posTmp.x + 1 == nouvellePosition.x)
+		{
+			deplacementValide = true;
+			diagonale = true;
+		}
+		else if (posTmp.y - 1 == nouvellePosition.y && posTmp.x - 1 == nouvellePosition.x)
+		{
+			deplacementValide = true;
+			diagonale = true;
+		}
+		break;
+	}
+		
+	if (saut)
+	{	
+		if (echiquier.getPiece({ posTmp.x, posTmp.y + direction }) == nullptr && echiquier.getPiece(nouvellePosition) == nullptr)
+			caseDisponible = true;
+	}
+	else if (diagonale)
+	{
+		if (echiquier.getPiece(nouvellePosition) != nullptr && \
+			echiquier.getPiece(nouvellePosition)->couleurPiece != couleurPiece)
+			caseDisponible = true;
+	}
+	else
+	{
+		if (echiquier.getPiece(nouvellePosition) == nullptr)
+			caseDisponible = true;
+	}
+
+return (deplacementValide && caseDisponible);
+
+
+}
